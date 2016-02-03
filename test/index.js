@@ -6,7 +6,7 @@ var basicPackageJson = require('./support/simple-package.json')
 var install = require('../index').install
 require('./support/sepia')
 
-var stat, _
+var stat, _, gulp
 
 test('eslint', require('tape-eslint')())
 
@@ -35,6 +35,17 @@ test('no dependencies (lodash)', function (t) {
     _ = require(join(process.cwd(), 'node_modules', 'lodash'))
     t.ok(typeof _ === 'function', '_ is available')
     t.ok(typeof _.clone === 'function', '_.clone is available')
+    t.end()
+  }, t.end)
+})
+
+test('github dependency (fixture)', function (t) {
+  prepare()
+  install({ input: ['git@github.com:gulpjs/gulp.git'], flags: { quiet: true } })
+  .then(function () {
+    gulp = require(join(process.cwd(), 'node_modules', 'gulp'))
+    t.ok(typeof gulp === 'function', 'gulp is available')
+    t.ok(typeof gulp.task === 'function', 'gulp.task is available')
     t.end()
   }, t.end)
 })
