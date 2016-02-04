@@ -39,9 +39,31 @@ test('no dependencies (lodash)', function (t) {
   }, t.end)
 })
 
-test('github dependency (fixture)', function (t) {
+test('github - user/name', function (t) {
   prepare()
-  install({ input: ['git@github.com:gulpjs/gulp.git'], flags: { quiet: true } })
+  install(['gulpjs/gulp'], flags: { quiet: true } })
+  .then(function () {
+    gulp = require(join(process.cwd(), 'node_modules', 'gulp'))
+    t.ok(typeof gulp === 'function', 'gulp is available')
+    t.ok(typeof gulp.task === 'function', 'gulp.task is available')
+    t.end()
+  }, t.end)
+})
+
+test('github - hostname/user/name', function (t) {
+  prepare()
+  install(['git@github.com:gulpjs/gulp.git'], flags: { quiet: true } })
+  .then(function () {
+    gulp = require(join(process.cwd(), 'node_modules', 'gulp'))
+    t.ok(typeof gulp === 'function', 'gulp is available')
+    t.ok(typeof gulp.task === 'function', 'gulp.task is available')
+    t.end()
+  }, t.end)
+})
+
+test('github - protocol://hostname/user/name', function (t) {
+  prepare()
+  install(['https://git@github.com:gulpjs/gulp.git'], flags: { quiet: true } })
   .then(function () {
     gulp = require(join(process.cwd(), 'node_modules', 'gulp'))
     t.ok(typeof gulp === 'function', 'gulp is available')
